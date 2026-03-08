@@ -1,0 +1,60 @@
+:root {
+  /* Dashboard - Spirited Away Ducks */
+  --dashboard-bg: url(../Img/StudioGhibli_DUCKS.jpg);
+
+  --dash-text: #3d2b1a; /* warm dark brown */
+  --dash-accent: #7db8a4; /* muted teal (the bath water) */
+  --dash-card: rgba(255, 245, 220, 0.75); /* warm cream translucent */
+  --dash-btn: #c8935a; /* warm orange (duck beak) */
+  --dash-btn-hover: #a87040; /* darker orange on hover */
+  --dash-border: #d4b896; /* soft tan */
+}
+
+body {
+  background: var(--dashboard-bg);
+  background-size: cover;
+  background-repeat: no-repeat;
+  color: var(--dash-text);
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  padding: 1em;
+  gap: 1em;
+
+  min-height: 25vh;
+  min-width: 25vw;
+
+  border-radius: 2em;
+
+  backdrop-filter: blur(2px);
+  background: var(--dash-card);
+  border: 0.5em var(--dash-border) solid;
+}
+
+.inlineIntro {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  gap: 1em;
+}
+
+form input[type="submit"] {
+  width: 65%;
+
+  padding: 0.75em;
+  font-weight: bold;
+  border-radius: 2em;
+
+  background: var(--dash-btn);
+}
+
+form input[type="submit"]:hover {
+  background: var(--dash-accent);
+  cursor: pointer;
+}
