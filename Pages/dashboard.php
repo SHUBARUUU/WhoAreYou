@@ -13,9 +13,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DASHBOARD</title>
+    <title>You are In</title>
     <link rel="stylesheet" href="../Assets/CSS/dashboard.css">
     <link rel="stylesheet" href="../Assets/CSS/global.css">
+
+    <link rel="shortcut icon" href="../Assets/Img/FaviconGhibli.png" type="image/x-icon">
+
+    <script src="../Assets/JS/dashboard.js" defer></script>
 </head>
 <body>
     <form action="logout.php" method="POST">
@@ -38,6 +42,7 @@
                 <h2><?= $email ?></h2>
             <?php endif?>
         </div>
+        <input type="button" id="quackBtn" value="Quack">
         <input type="submit" name="sbmtD" id="sbmtD" value="Log Out">
     </form>
 </body>

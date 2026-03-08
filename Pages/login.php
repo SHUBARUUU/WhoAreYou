@@ -36,6 +36,8 @@ if (!empty($_POST["email"]) && !empty($_POST["pass"])) {
     <link rel="stylesheet" href="../Assets/CSS/global.css">
     <link rel="stylesheet" href="../Assets/CSS/auth.css">
 
+    <link rel="shortcut icon" href="../Assets/Img/FaviconGhibli.png" type="image/x-icon">
+
     <script src="../Assets/JS/auth.js" defer></script>
 </head>
 

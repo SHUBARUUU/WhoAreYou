@@ -44,7 +44,8 @@ form {
   gap: 1em;
 }
 
-form input[type="submit"] {
+form input[type="submit"],
+form input[type="button"] {
   width: 65%;
 
   padding: 0.75em;
@@ -54,7 +55,8 @@ form input[type="submit"] {
   background: var(--dash-btn);
 }
 
-form input[type="submit"]:hover {
+form input[type="submit"]:hover,
+form input[type="button"]:hover {
   background: var(--dash-accent);
   cursor: pointer;
 }
