@@ -217,6 +217,25 @@ form {
   color: var(--login-text);
 }
 
+/** ========== Specific container of register (design) ========== */
+
+#signInAcc {
+  font-weight: bold;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  gap: 0.5em;
+}
+#signInAcc a {
+  color: var(--register-accent);
+  text-decoration: none;
+}
+#signInAcc a:hover {
+  color: var(--register-text);
+}
+
 /** ========== Input field (Submit button) ==========  */
 
 /** Design for submit input for both login and register  */

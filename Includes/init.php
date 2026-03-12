@@ -13,6 +13,8 @@
     require_once(__DIR__ .'/../Includes/auth.php'); // Gets auth php
     require_once(__DIR__ .'/../Includes/helpers.php'); // Gets helper php
 
+    require_once(__DIR__ .'/../Includes/anime_watchlist.php');  // Gets anime_watchlist php
+
     //  Passes the Db object to auth classs
     $auth = new Auth(new Db());
 ?>

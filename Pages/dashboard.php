@@ -6,6 +6,15 @@
     $name = $_SESSION["name"] ?? null;
     $email = $_SESSION["email"] ?? null;
 
+
+    if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["sbmtIn"])){
+        redirect("../Pages/aniLog.php");
+    }
+
+    if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["sbmtOut"])){
+        redirect("../Pages/logout.php");
+    }
+
 ?>
 
 <!DOCTYPE html>
@@ -22,7 +31,7 @@
     <script src="../Assets/JS/dashboard.js" defer></script>
 </head>
 <body>
-    <form action="logout.php" method="POST">
+    <form action="" method="POST">
         <h1>You're in lmao</h1>
         <div class="inlineIntro">
             <h1>You are: </h1>
@@ -43,7 +52,9 @@
             <?php endif?>
         </div>
         <input type="button" id="quackBtn" value="Quack">
-        <input type="submit" name="sbmtD" id="sbmtD" value="Log Out">
+        <input type="submit" name="sbmtIn" id="sbmtIn" value="AniLog">
+        <input type="submit" name="sbmtOut" id="sbmtOut" value="Log Out">
+        
     </form>
 </body>
 </html>
