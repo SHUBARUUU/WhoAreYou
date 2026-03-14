@@ -146,8 +146,9 @@ nav a:hover {
   color: var(--anilog-highlight);
   cursor: pointer;
 }
-/* #unfocusContent {
-  height: 75%;
+#focusContent {
+  display: none;
+  height: 100%;
   width: 100%;
 
   position: absolute;
@@ -157,25 +158,56 @@ nav a:hover {
   z-index: 0;
 
   background-color: var(--anilog-card);
-} */
+}
 
 .invisiContainers {
   display: none;
-
   position: absolute;
   right: 50%;
   top: 50%;
   transform: translate(50%, -50%);
+
+  width: clamp(18rem, 40%, 35rem);
+
   z-index: 1;
-}
 
-#addContainer {
-  border: 1em solid red;
-
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: center;
+  border: 5px solid var(--anilog-input-border);
+  border-radius: 0.5rem;
+  padding: 1em;
+  background-color: var(--anilog-card);
 
   gap: 0.2em;
+}
+
+/* Apply grid only when visible */
+.invisiContainers.active {
+  display: grid;
+  grid-template-columns: 1fr;
+}
+
+#addInnerContainer,
+#updateInnerContainer,
+#deleteInnerContainer,
+#searchInnerContainer {
+  display: grid;
+  grid-template-columns: 1fr; /* 1 column, full width */
+  gap: 0.5em;
+}
+
+#addInnerContainer input,
+#updateInnerContainer input,
+#deleteInnerContainer input,
+#searchInnerContainer input {
+  width: 100%; /*Fills the container width*/
+}
+
+input::placeholder {
+  color: var(--anilog-text);
+  opacity: 0.75;
+}
+
+.invisiContainers .sbmtBtns {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.5em;
 }

@@ -1,26 +1,35 @@
-function showContainer(buttonId, containerId) {
+function showContainer(buttonId, containerId, focusId) {
   document.getElementById(buttonId).addEventListener("click", function (e) {
     const container = document.getElementById(containerId);
+    const focus = document.getElementById(focusId);
 
-    // Check if it's already showing BEFORE hiding others
-    const isShowing = container.style.display === "block";
+    // Hide all containers AND focus bg
+    document
+      .querySelectorAll("[id$='OuterContainer'], #focusContent")
+      .forEach((c) => {
+        c.style.display = "none";
+      });
 
-    // Hide all containers
-    document.querySelectorAll("[id$='Container']").forEach((c) => {
-      c.style.display = "none";
-    });
-
-    // Toggle: if it was showing, keep it hidden. If it was hidden, show it
-    if (!isShowing) {
-      container.style.display = "block";
-    }
+    // Show the clicked one
+    container.style.display = "grid";
+    focus.style.display = "block";
   });
 }
 
-// Use it for each button
-showContainer("addBtn", "addContainer");
-showContainer("updateBtn", "updateContainer");
-showContainer("deleteBtn", "deleteContainer");
-showContainer("searchBtn", "searchContainer");
+// Setup Exit buttons
+document.querySelectorAll("[name='sbmtExit']").forEach((btn) => {
+  btn.addEventListener("click", function () {
+    // Hide all containers AND focus bg
+    document
+      .querySelectorAll("[id$='OuterContainer'], #focusContent")
+      .forEach((c) => {
+        c.style.display = "none";
+      });
+  });
+});
 
-console.log("Hello");
+// Use it for each button
+showContainer("addBtn", "addOuterContainer", "focusContent");
+showContainer("updateBtn", "updateOuterContainer", "focusContent");
+showContainer("deleteBtn", "deleteOuterContainer", "focusContent");
+showContainer("searchBtn", "searchOuterContainer", "focusContent");
