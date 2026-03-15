@@ -53,12 +53,28 @@ if (register) {
 
     if (!usernameVal || !mailVal || !passVal) {
       e.preventDefault();
+
+      if (!usernameVal) showError(errorUsernameR, "Username is required.");
+
+      if (!mailVal) showError(errorEmailR, "Email is required.");
+
+      if (!passVal) showError(errorPassR, "Password is required.");
+    }
+
+    if (usernameVal.match("[^a-zA-Z0-9_]")) {
+      showError(errorUsernameR, "Field cannot have invalid character.");
+      e.preventDefault();
+    }
+
+    if (!mailVal.match(".*@.*") && mailVal) {
+      showError(errorEmailR, "@ is missing.");
+      e.preventDefault();
     }
 
     if (!chckBxVal.checked) {
-      e.preventDefault();
       chckBxUnchecked.style.visibility = "visible";
       chckBxUnchecked.textContent = "Please Accept the terms.";
+      e.preventDefault();
     } else {
       document.getElementById("chckBx-unchecked").style.visibility = "hidden";
     }
@@ -70,10 +86,15 @@ function validateField(input, errorEl, message) {
 
   input.addEventListener("blur", function () {
     if (!input.value) {
-      errorEl.textContent = message;
-      errorEl.style.visibility = "visible";
+      showError(errorEl, message);
     } else {
       errorEl.style.visibility = "hidden";
     }
   });
+}
+
+function showError(errorEl, message) {
+  if (!errorEl) return;
+  errorEl.textContent = message;
+  errorEl.style.visibility = "visible";
 }
