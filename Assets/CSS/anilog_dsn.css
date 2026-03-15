@@ -1,0 +1,213 @@
+/** CSS variables  */
+
+:root {
+  /* Spirited Away Dragon - deep moonlit blues */
+  --anilog-bg: url(../Img/Spirited\ Away\ Dragon.jpg);
+  --anilog-text: #e8f0f7;
+  --anilog-accent: #7ec8e3;
+  --anilog-card: rgba(8, 15, 30, 0.75);
+  --anilog-btn: #2a6496;
+  --anilog-btn-hover: #1a4a72;
+  --anilog-input-border: #7ec8e3;
+  --anilog-highlight: #b8d4e8;
+
+  /* Navbar */
+  --nav-bg: rgba(8, 15, 30, 0.85); /* same night tone, slightly more opaque */
+  --nav-border: rgba(126, 200, 227, 0.2); /* subtle accent border at bottom */
+  --nav-text: #e8f0f7;
+  --nav-hover: #7ec8e3; /* accent on hover */
+}
+
+body {
+  background: var(--anilog-bg);
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  color: var(--anilog-text);
+
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: auto 1fr;
+
+  grid-template-areas: "nav" "content";
+
+  min-height: 100vh;
+  min-width: 100vw;
+}
+
+nav {
+  /** Aligns itself latched on the top (Desgin came from global.css) */
+  align-self: self-start;
+
+  /** Grid area of the whole page */
+  grid-area: nav;
+
+  background: var(--nav-bg);
+  border-bottom: 1px solid var(--nav-border);
+  color: var(--nav-text);
+  backdrop-filter: blur(8px);
+
+  width: 100%;
+  height: 100%;
+
+  display: grid;
+  grid-template-columns: 10em 1fr 5em;
+  grid-template-rows: 1fr;
+  grid-template-areas: "totoroNsign free exit";
+
+  padding: 1em;
+}
+
+#totoroNsign {
+  /** Grid area of the navbar */
+  grid-area: totoroNsign;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  height: 100%;
+  width: 100%;
+
+  gap: 1em;
+}
+
+nav a {
+  /** Grid area of the navbar */
+  grid-area: exit;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: 100%;
+  height: 100%;
+
+  color: var(--anilog-text);
+  text-decoration: none;
+}
+
+nav a:hover {
+  color: var(--nav-hover);
+}
+
+#content {
+  grid-area: content;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  width: 100%;
+  height: 100%;
+}
+
+#container {
+  width: 75%;
+  height: 75%;
+
+  border: 0.8em solid var(--anilog-card);
+  border-radius: 5px;
+
+  background-color: var(--anilog-card);
+}
+
+#aboveBtns {
+  width: 75%;
+}
+
+#aboveBtns form {
+  width: auto;
+  height: 100%;
+
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: auto;
+
+  gap: 0.5em;
+}
+
+#aboveBtns form input {
+  padding: 0.5em;
+  margin: 0.2em;
+  width: auto;
+
+  background-color: var(--anilog-btn);
+
+  border: 5px solid var(--anilog-input-border);
+  border-radius: 1em;
+
+  color: var(--anilog-text);
+}
+
+#aboveBtns form input:hover {
+  background-color: var(--anilog-btn-hover);
+  color: var(--anilog-highlight);
+  cursor: pointer;
+}
+#focusContent {
+  display: none;
+  height: 100%;
+  width: 100%;
+
+  position: absolute;
+  right: 50%;
+  top: 50%;
+  transform: translate(50%, -50%);
+  z-index: 0;
+
+  background-color: var(--anilog-card);
+}
+
+.invisiContainers {
+  display: none;
+  position: absolute;
+  right: 50%;
+  top: 50%;
+  transform: translate(50%, -50%);
+
+  width: clamp(18rem, 40%, 35rem);
+
+  z-index: 1;
+
+  border: 5px solid var(--anilog-input-border);
+  border-radius: 0.5rem;
+  padding: 1em;
+  background-color: var(--anilog-card);
+
+  gap: 0.2em;
+}
+
+/* Apply grid only when visible */
+.invisiContainers.active {
+  display: grid;
+  grid-template-columns: 1fr;
+}
+
+#addInnerContainer,
+#updateInnerContainer,
+#deleteInnerContainer,
+#searchInnerContainer {
+  display: grid;
+  grid-template-columns: 1fr; /* 1 column, full width */
+  gap: 0.5em;
+}
+
+#addInnerContainer input,
+#updateInnerContainer input,
+#deleteInnerContainer input,
+#searchInnerContainer input {
+  width: 100%; /*Fills the container width*/
+}
+
+input::placeholder {
+  color: var(--anilog-text);
+  opacity: 0.75;
+}
+
+.invisiContainers .sbmtBtns {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.5em;
+}

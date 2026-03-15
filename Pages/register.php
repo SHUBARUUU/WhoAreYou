@@ -77,8 +77,13 @@
                     <label for="chckBx">I accept the terms of the agreement.</label>
                     <span id="chckBx-unchecked"></span>
                 </div>
+                
                 <input type="submit" name="sbmtR" id="sbmtR" value="Sign Up">
 
+                <div id="signInAcc">
+                    <p>Already have an account? </p>
+                    <a href="login.php">Log in</a>
+                </div>
             </form>
         </div>
     </div>
