@@ -7,21 +7,19 @@ header("Cache-Control: no-store, no-cache, must-revalidate");
 header("Pragma: no-cache");
 header("Expires: 0");
 
+$hasRecords = false;
+if($watchlist->checkList($_SESSION["user"])) {
+    $newRecords = $watchlist->getAll($_SESSION["user"]);    
+    $hasRecords = true;
+}
+
 // Adds record to the anime log
 if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["sbmtAdd"])){
-    $title = $watchlist->sanitize($_POST["addTitle"]);
-    $status = $watchlist->sanitize($_POST["addStatus"]);
-    $episode = $watchlist->sanitize($_POST["addEpisode"]);
-    $rating = $watchlist->sanitize($_POST["addRating"]);
-    $verdict = $watchlist->sanitize($_POST["addVerdict"]);
-    $rewatch = $watchlist->sanitize($_POST["addRewatch"]);
+    require_once(__DIR__ ."/../App/Anime/create.php");  
+}
 
-    $added = $watchlist->addRecord($_SESSION["user"],$title, $status, $episode, $rating,$verdict,$rewatch);
-
-    if($added){
-        redirect("aniLog.php");
-        exit();
-    }
+if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["sbmtUpdate"])){
+    require_once(__DIR__ . "/../App/Anime/update.php");
 }
 
 ?>
@@ -33,6 +31,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["sbmtAdd"])){
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AniLog</title>
+    <link rel="shortcut icon" href="../Assets/Img/FaviconGhibli.png" type="image/x-icon">
 
     <link rel="stylesheet" href="../Assets//CSS/global.css">
     <link rel="stylesheet" href="../Assets/CSS/anilog_dsn.css">
@@ -62,14 +61,42 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["sbmtAdd"])){
                 <div class="invisiContainers" id="addOuterContainer">
                     <div id="addInnerContainer">
                         <h2>ADD A RECORD</h2>
-                        <input type="text" name="addTitle" id="" placeholder="Anime title">
-                        <input type="text" name="addStatus" id="" placeholder="Status">
-                        <input type="text" name="addEpisode" id="" placeholder="Episodes">
-                        <input type="text" name="addRating" id="" placeholder="Rating">
-                        <input type="text" name="addVerdict" id="" placeholder="Verdict">
-                        <input type="text" name="addRewatch" id="" placeholder="Rewatch">
+                        <input type="text" name="addTitle" id="addAnimeTitle" placeholder="Anime title">
+                        <span id="addTitle-err" class="err"></span>
+
+                        <select name="addStatus" id="">
+                            <option value="Plan to Watch">Plan to Watch</option>
+                            <option value="Watching">Watching</option>
+                            <option value="Completed">Completed</option>
+                            <option value="Dropped">Dropped</option>
+                        </select>
+
+                        <div class="counters">
+                            <h4>Episodes:</h4>
+                            <input type="number" name="addEpisode" value="1" min="1" max="50" placeholder="1">
+                            <button type="button" id="epPlus">+</button>
+                            <button type="button" id="epMinus">-</button>
+                        </div>
+
+                       <div class="counters">
+                            <h4>Rating:</h4>
+                            <input type="number" name="addRating" value="1" min="1" max="10" placeholder="1">
+                            <button type="button" id="ratePlus">+</button>
+                            <button type="button" id="rateMinus">-</button>
+                        </div>
+                        <textarea name="addVerdict" id="addAnimeVerdict" placeholder="Verdict"></textarea>
+                        <span id="addVerdict-err" class="err"></span>
+
+                        <label class="toggle">
+                            <h4>Rewatch?</h4>
+                            <input type="checkbox" name="addRewatch" value="1">
+                            <span class="slider"></span>
+                            <span class="toggleLabel" id="addLbl">No</span>
+                        </label>
                         <div class="sbmtBtns">
-                            <input type="submit" name="sbmtAdd" id="" value="Add">
+                            <!-- always in the form but disabled by default (The submit button checker per container) -->
+                            <input type="hidden" name="sbmtAdd" id="hiddenSbmtAdd" value="1" disabled>
+                            <input type="submit" id="sbmtAdd" value="Add">
                             <input type="button" name="sbmtExit" id="" value="Exit">
                         </div>
                     </div>
@@ -77,15 +104,41 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["sbmtAdd"])){
                 <div class="invisiContainers" id="updateOuterContainer">
                     <div id="updateInnerContainer">
                         <h2>UPDATE A RECORD</h2>
-                        <input type="text" name="" id="" placeholder="Anime title">
-                        <input type="text" name="" id="" placeholder="Status">
-                        <input type="text" name="" id="" placeholder="Episodes">
-                        <input type="text" name="" id="" placeholder="Rating">
-                        <input type="text" name="" id="" placeholder="Verdict">
-                        <input type="text" name="" id="" placeholder="Rewatch">
+                        <input type="text" name="updateTitle" id="updateAnimeTitle" placeholder="Anime title">
+                        <span id="updateTitle-err" class="err"></span>
 
+                        <select name="updateStatus" id="">
+                            <option value="Plan to Watch">Plan to Watch</option>
+                            <option value="Watching">Watching</option>
+                            <option value="Completed">Completed</option>
+                            <option value="Dropped">Dropped</option>
+                        </select>
+
+                        <div class="counters">
+                            <h4>Episodes:</h4>
+                            <input type="number" name="updateEpisode" value="1" min="1" max="50" placeholder="1">
+                            <button type="button" id="updateEpPlus">+</button>
+                            <button type="button" id="updateEpMinus">-</button>
+                        </div>
+
+                       <div class="counters">
+                            <h4>Rating:</h4>
+                            <input type="number" name="updateRating" value="1" min="1" max="10" placeholder="1">
+                            <button type="button" id="updateRatePlus">+</button>
+                            <button type="button" id="updateRateMinus">-</button>
+                        </div>
+                        
+                        <textarea name="updateVerdict" id="updateAnimeVerdict" placeholder="Verdict"></textarea>
+                        <span id="updateVerdict-err" class="err"></span>
+
+                        <label class="toggle">
+                            <h4>Rewatch?</h4>
+                            <input type="checkbox" name="updateRewatch" value="1">
+                            <span class="slider"></span>
+                            <span class="toggleLabel" id="updateLbl">No</span>
+                        </label>
                         <div class="sbmtBtns">
-                            <input type="button" name="sbmtUpdate" id="" value="Update">
+                            <input type="submit" name="sbmtUpdate" id="" value="Add">
                             <input type="button" name="sbmtExit" id="" value="Exit">
                         </div>
                     </div>
@@ -112,7 +165,11 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["sbmtAdd"])){
             </form>
         </div>
         <div id="container">
-
+            <?php if($hasRecords): ?>
+                <?php include(__DIR__ . "/../App/Anime/read.php") ?>
+            <?php else: ?>
+                <h2>No anime logged yet. Try again!</h2> 
+            <?php endif;?>
         </div>
         <div id="focusContent"></div>
     </main>

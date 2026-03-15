@@ -15,17 +15,20 @@
 
     if (!empty($_POST["username"]) && !empty($_POST["email"]) && !empty($_POST["pass"])) {
         $username = htmlspecialchars($_POST["username"], ENT_QUOTES);
-        $email = htmlspecialchars($_POST["email"], ENT_QUOTES);
-        $password = htmlspecialchars(trim($_POST["pass"]), ENT_QUOTES);
-        $checked = $_POST["chckBx"] ?? null;
 
-        if(isset($checked)){
-             if($auth->register($username, $email, $password)){
-                redirect("../index.php");
-                exit();  
-            }
+        if(preg_match('/^[a-zA-Z0-9_]+$/', $username)){ 
+            $email = htmlspecialchars($_POST["email"], ENT_QUOTES);
+            $password = htmlspecialchars(trim($_POST["pass"]), ENT_QUOTES);
+            $checked = $_POST["chckBx"] ?? null;
 
-            $error = "Email already in use.";
+            if(isset($checked)){
+                if($auth->register($username, $email, $password)){
+                    redirect("../index.php");
+                    exit();  
+                }
+
+                $error = "Email already in use.";
+            }       
         }
     }
 ?>

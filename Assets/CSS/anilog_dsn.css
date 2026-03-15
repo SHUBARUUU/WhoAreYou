@@ -35,6 +35,8 @@ body {
   min-width: 100vw;
 }
 
+/** =============== DESIGN NAV CONTAINER ===============*/
+
 nav {
   /** Aligns itself latched on the top (Desgin came from global.css) */
   align-self: self-start;
@@ -87,10 +89,12 @@ nav a {
   text-decoration: none;
 }
 
+/** Nav Hover */
 nav a:hover {
   color: var(--nav-hover);
 }
 
+/** =============== DESIGN FOR THE CONTENT (BUTTONS AND CONTAINER) ===============*/
 #content {
   grid-area: content;
 
@@ -103,20 +107,16 @@ nav a:hover {
   height: 100%;
 }
 
-#container {
-  width: 75%;
-  height: 75%;
+/** =============== DESIGN FOR THE BUTTONS ===============*/
 
-  border: 0.8em solid var(--anilog-card);
-  border-radius: 5px;
-
-  background-color: var(--anilog-card);
-}
-
+/** The buttons (add,update,delete, search)  */
 #aboveBtns {
   width: 75%;
+  margin-bottom: 0.5em;
+  margin-top: 0.5em;
 }
 
+/** The actual form tag for the buttons  */
 #aboveBtns form {
   width: auto;
   height: 100%;
@@ -128,9 +128,12 @@ nav a:hover {
   gap: 0.5em;
 }
 
-#aboveBtns form input {
+/** Designs for input, select, text area, and button  */
+#aboveBtns form input,
+#aboveBtns form select,
+#aboveBtns form textarea,
+#aboveBtns form .counters button {
   padding: 0.5em;
-  margin: 0.2em;
   width: auto;
 
   background-color: var(--anilog-btn);
@@ -141,11 +144,24 @@ nav a:hover {
   color: var(--anilog-text);
 }
 
-#aboveBtns form input:hover {
+/** Removes the up and down arrow for the counter */
+#aboveBtns input[type="number"]::-webkit-outer-spin-button,
+#aboveBtns input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/** Input hovers in form  */
+#aboveBtns form input:hover,
+#aboveBtns form select:hover,
+#aboveBtns form button:hover {
   background-color: var(--anilog-btn-hover);
   color: var(--anilog-highlight);
   cursor: pointer;
 }
+
+/** =============== DESIGN FOR THE BG UNFOCUS (TOGGLE INACTIVE/ACTIVE) ===============*/
+/** THE BACKGROUND WHEN FORM APPEARS  */
 #focusContent {
   display: none;
   height: 100%;
@@ -160,6 +176,8 @@ nav a:hover {
   background-color: var(--anilog-card);
 }
 
+/** =============== DESIGN FOR THE BG INVISIBLE CONTAINERS (TOGGLE INACTIVE/ACTIVE) ===============*/
+/** Design for the container that would appear  */
 .invisiContainers {
   display: none;
   position: absolute;
@@ -179,35 +197,281 @@ nav a:hover {
   gap: 0.2em;
 }
 
-/* Apply grid only when visible */
-.invisiContainers.active {
-  display: grid;
-  grid-template-columns: 1fr;
-}
-
+/** Individual layout for the container that appeared  */
 #addInnerContainer,
 #updateInnerContainer,
 #deleteInnerContainer,
 #searchInnerContainer {
   display: grid;
-  grid-template-columns: 1fr; /* 1 column, full width */
+  grid-template-columns: 1fr;
+  grid-auto-rows: auto;
   gap: 0.5em;
 }
 
-#addInnerContainer input,
-#updateInnerContainer input,
-#deleteInnerContainer input,
-#searchInnerContainer input {
-  width: 100%; /*Fills the container width*/
+/** Focuses on the textarea (Verdict Field) height and width  */
+#addInnerContainer textarea,
+#updateInnerContainer textarea,
+#deleteInnerContainer textarea,
+#searchInnerContainer textarea {
+  min-height: 8em;
+  width: 100%;
 }
 
-input::placeholder {
+input::placeholder,
+textarea::placeholder {
   color: var(--anilog-text);
   opacity: 0.75;
+}
+
+/*? Design for addCounters div (Range for ) Episode and Rating */
+.invisiContainers .counters {
+  display: grid;
+  grid-template-columns: 2fr auto 1fr 1fr;
+  grid-template-rows: auto;
+  gap: 0.5em;
+  align-items: center;
+  /** NEEDS CONTENT ALIGNMENT VERTICAL  */
+  width: 100%;
+}
+
+/** Design for Rewatch */
+.toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.75em;
+  cursor: pointer;
+}
+
+.toggle input[type="checkbox"] {
+  display: none;
+}
+
+.slider {
+  width: 45px;
+  height: 24px;
+  background: var(--anilog-card);
+  border: 1px solid var(--anilog-input-border);
+  border-radius: 999px;
+  position: relative;
+  transition: background 0.3s;
+}
+
+.slider::before {
+  content: "";
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  background: var(--anilog-text);
+  border-radius: 50%;
+  top: 2px;
+  left: 3px;
+  transition: transform 0.3s;
+}
+
+.toggle input:checked + .slider {
+  background: var(--anilog-accent);
+}
+
+.toggle input:checked + .slider::before {
+  transform: translateX(20px);
 }
 
 .invisiContainers .sbmtBtns {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 0.5em;
+}
+.invisiContainers span.err {
+  display: none;
+  font-size: 0.75em;
+  color: red;
+  text-align: center;
+}
+
+/** =============== DESIGN FOR CONTAINER ===============*/
+/** The container inside the content (form)  */
+#container {
+  width: clamp(60%, 75%, 95%);
+  height: 70vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  border: 0.8em solid var(--anilog-card);
+  border-radius: 5px;
+  background-color: var(--anilog-card);
+  padding: 1em;
+
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1em;
+  align-content: start;
+}
+
+.animeCard {
+  background-color: var(--anilog-btn);
+  border: 2px solid var(--anilog-input-border);
+  border-radius: 0.75em;
+  padding: 1em;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+
+  transition: transform 0.2s;
+}
+
+.animeCard:hover {
+  transform: translateY(-3px);
+  cursor: pointer;
+}
+
+.cardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--anilog-input-border);
+  padding-bottom: 0.5em;
+  gap: 0.5em;
+}
+
+.cardHeader h3 {
+  font-style: italic;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  flex: 1;
+  min-width: 0;
+  cursor: pointer;
+  transition: all 0.3s;
+  word-break: break-all;
+}
+
+.cardHeader h3.expanded {
+  display: block;
+  overflow: hidden;
+}
+
+/** The scroll bar of the anime card  */
+#container::-webkit-scrollbar {
+  width: 6px;
+}
+
+#container::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+#container::-webkit-scrollbar-thumb {
+  background: var(--anilog-accent);
+  border-radius: 999px;
+}
+
+#container::-webkit-scrollbar-thumb:hover {
+  background: var(--anilog-highlight);
+}
+
+/** The checkbox of the anime carrd  */
+.animeSelect {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 1.2em;
+  height: 1.2em;
+  border: 2px solid var(--anilog-input-border);
+  border-radius: 50%; /* circle */
+  background-color: var(--anilog-card);
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 0.2s;
+}
+
+/** Design when the checkbox is currently checked */
+.animeSelect:checked {
+  background-color: var(--anilog-accent);
+  border-color: var(--anilog-accent);
+}
+
+/** The rating of anime card  */
+.rating {
+  background-color: var(--anilog-card);
+  border: 1px solid var(--anilog-input-border);
+  border-radius: 999px;
+  padding: 0.2em 0.6em;
+  font-size: 0.85em;
+}
+/** Designs the COLOR of the container of rating (Depends on the value of the number)  */
+.rating[data-rating="8"],
+.rating[data-rating="9"],
+.rating[data-rating="10"] {
+  background-color: #2ecc71;
+  color: #000;
+}
+
+.rating[data-rating="5"],
+.rating[data-rating="6"],
+.rating[data-rating="7"] {
+  background-color: #f39c12;
+  color: #000;
+}
+
+.rating[data-rating="1"],
+.rating[data-rating="2"],
+.rating[data-rating="3"],
+.rating[data-rating="4"] {
+  background-color: #e74c3c;
+  color: #fff;
+}
+
+/** The card body of the anime card (Body after the head of the card)  */
+.cardBody {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25em;
+  font-size: 0.9em;
+}
+
+.cardBody p {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.3s;
+  word-break: break-word;
+}
+
+.cardBody p.expanded {
+  display: block;
+  overflow: hidden;
+}
+
+/** The status of the anime card  */
+.status {
+  background-color: var(--anilog-card);
+  border-radius: 999px;
+  padding: 0.2em 0.6em;
+  font-size: 0.8em;
+  width: fit-content;
+}
+/** Designs the COLOR of the container of status (Depending on the value of the status)  */
+.status[data-status="Completed"] {
+  background-color: #2ecc71;
+  color: #000;
+}
+.status[data-status="Watching"] {
+  background-color: #3498db;
+  color: #fff;
+}
+.status[data-status="Dropped"] {
+  background-color: #e74c3c;
+  color: #fff;
+}
+.status[data-status="Plan to Watch"] {
+  background-color: #f39c12;
+  color: #000;
+}
+
+.readMore {
+  font-size: 1em;
+  color: var(--anilog-accent);
+  cursor: pointer;
+  display: none;
 }
