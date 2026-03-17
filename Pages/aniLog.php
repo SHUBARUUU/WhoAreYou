@@ -17,9 +17,10 @@ if($watchlist->checkList($_SESSION["user"])) {
 if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["sbmtAdd"])){
     require_once(__DIR__ ."/../App/Anime/create.php");  
 }
-
-if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["sbmtUpdate"])){
+if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["sbmtUpdate"]) && $hasRecords){
     require_once(__DIR__ . "/../App/Anime/update.php");
+}if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["sbmtDelete"]) && $hasRecords){
+    require_once(__DIR__ . "/../App/Anime/delete.php");
 }
 
 ?>
@@ -138,8 +139,11 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["sbmtUpdate"])){
                             <span class="toggleLabel" id="updateLbl">No</span>
                         </label>
                         <div class="sbmtBtns">
-                            <input type="submit" name="sbmtUpdate" id="" value="Add">
+                            <input type="hidden" name="sbmtUpdate" id="hiddenSbmtUpdate" value="1" disabled>
+                            <input type="submit" name="sbmtUpdate" id="sbmtUpdate" value="Update">
                             <input type="button" name="sbmtExit" id="" value="Exit">
+                            <!-- The list id of the data  -->
+                            <input type="hidden" value="" name="updateListId" id="updateListId"></input>
                         </div>
                     </div>
                 </div>
@@ -147,17 +151,20 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["sbmtUpdate"])){
                     <div id="deleteInnerContainer">
                         <h2>Do you wish to delete this log?</h2>
                         <div class="sbmtBtns">
-                            <input type="button" name="sbmtDelete" id="" value="Delete">
+                            <input type="hidden" name="sbmtDelete" id="hiddenSbmtRemove" value="1" disabled>
+                            <input type="submit" name="sbmtDelete" id="sbmtDelete" value="Delete">
                             <input type="button" name="sbmtExit" id="" value="Exit">
+                            <!-- The list id of the data  -->
+                            <input type="hidden" value="" name="removeListId" id="removeListId"></input>
                         </div>
                     </div>
                 </div>
                 <div class="invisiContainers" id="searchOuterContainer">
                     <div id="searchInnerContainer">
                         <h2>SEARCH A RECORD</h2>
-                        <input type="text" name="" id="" placeholder="Search record">
+                        <input type="text" name="" id="searchValue" placeholder="Search record">
                         <div class="sbmtBtns">
-                            <input type="button" name="sbmtSearch" id="" value="Search">
+                            <input type="button" id="sbmtSearch" value="Search">
                             <input type="button" name="sbmtExit" id="" value="Exit">
                         </div>
                     </div>

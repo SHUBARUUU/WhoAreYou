@@ -1,11 +1,11 @@
 <?php
 
-//? Deciding whether or not to include listNum variable.. (Number per record) 
+//? Deciding whether or not to include listNum variable.. (Newly made number of records per user) 
     foreach($newRecords as $record) {
     echo "
         <div class='animeCard'>
                 <div class='cardHeader'>
-                    <input type='checkbox' class='animeSelect'>
+                    <input type='checkbox' class='animeSelect' data-list-id='{$record["dbAnimeId"]}'>
                     <h3 title='{$record["title"]}'>{$record["title"]}</h3>
                     <span class='rating' data-rating='{$record["rating"]}'>{$record["rating"]}/10</span>
                 </div>

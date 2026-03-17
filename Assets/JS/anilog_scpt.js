@@ -1,80 +1,143 @@
+//* ==================== CONTAINER TOGGLE FUNCTIONS ====================
+
+//* SHOW CONTAINER - displays the clicked container and hides others
 function showContainer(buttonId, containerId, focusId) {
   document.getElementById(buttonId).addEventListener("click", function (e) {
     const container = document.getElementById(containerId);
     const focus = document.getElementById(focusId);
 
-    // Hide all containers AND focus bg
+    //* Hide all containers and focus background
     document
       .querySelectorAll("[id$='OuterContainer'], #focusContent")
       .forEach((c) => {
         c.style.display = "none";
       });
 
-    // Show the clicked one
+    //* Show only the clicked container
     container.style.display = "grid";
     focus.style.display = "block";
   });
 }
 
-// Setup Exit buttons
-document.querySelectorAll("[name='sbmtExit']").forEach((btn) => {
-  btn.addEventListener("click", function () {
-    // Hide all containers AND focus bg
-    document
-      .querySelectorAll("[id$='OuterContainer'], #focusContent")
-      .forEach((c) => {
-        c.style.display = "none";
-      });
-  });
-});
+//* HIDE ALL CONTAINERS - reusable function to hide all open containers
+function hideAllContainers() {
+  document
+    .querySelectorAll("[id$='OuterContainer'], #focusContent")
+    .forEach((c) => {
+      c.style.display = "none";
+    });
+}
 
-// Use it for each button
+//* Setup all main buttons (Add, Delete, Search)
 showContainer("addBtn", "addOuterContainer", "focusContent");
-showContainer("updateBtn", "updateOuterContainer", "focusContent");
-showContainer("deleteBtn", "deleteOuterContainer", "focusContent");
 showContainer("searchBtn", "searchOuterContainer", "focusContent");
 
+//* Setup Exit buttons - closes all containers when clicked
+document.querySelectorAll("[name='sbmtExit']").forEach((btn) => {
+  btn.addEventListener("click", hideAllContainers);
+});
+
+//* ==================== UPDATE BUTTON LOGIC ====================
+
+//* UPDATE BUTTON - detects which checkboxes are checked
+document.getElementById("updateBtn").addEventListener("click", () => {
+  detectCheckedCheckboxes("update");
+});
+
+//* DELETE BUTTON - detects which checkboxes are checked
+document.getElementById("deleteBtn").addEventListener("click", () => {
+  detectCheckedCheckboxes("delete");
+});
+
+//* DETECT CHECKED CHECKBOXES - validates and shows update container if exactly 1 is checked
+function detectCheckedCheckboxes(clickedBtn) {
+  const checkedBoxes = document.querySelectorAll(
+    "input[type='checkbox'][data-list-id]:checked",
+  );
+
+  if (checkedBoxes.length === 0) {
+    return;
+  }
+
+  if (checkedBoxes.length === 1 && clickedBtn === "update") {
+    //* Show the update container only if 1 checkbox is selected
+    hideAllContainers();
+    document.getElementById("updateOuterContainer").style.display = "grid";
+    document.getElementById("focusContent").style.display = "block";
+
+    //* Get and log the selected anime ID
+    checkedBoxes.forEach((checkbox) => {
+      submitUpdate(checkbox.dataset.listId);
+    });
+
+    return;
+  } else if (checkedBoxes.length === 1 && clickedBtn === "delete") {
+    //* Show the update container only if 1 checkbox is selected
+    hideAllContainers();
+    document.getElementById("deleteOuterContainer").style.display = "grid";
+    document.getElementById("focusContent").style.display = "block";
+
+    checkedBoxes.forEach((checkbox) => {
+      submitRemove(checkbox.dataset.listId);
+    });
+    return;
+  }
+
+  //* Alert if more than 1 checkbox is selected
+  window.alert("Select one anime at a time..");
+}
+
+//* ==================== REWATCH TOGGLE ====================
+
+//* REWATCH TOGGLE FUNCTION - updates label text based on checkbox state
 function rewatchToggle(rewatchToggle, tLabel) {
   rewatchToggle.addEventListener("change", () => {
     tLabel.textContent = rewatchToggle.checked ? "Yes" : "No";
   });
 }
 
+//* Setup rewatch toggle for Add form
 const addToggle = document.querySelector('input[name="addRewatch"]');
 const addLbl = document.getElementById("addLbl");
 
+//* Setup rewatch toggle for Update form
 const updateToggle = document.querySelector('input[name="updateRewatch"]');
 const updateLbl = document.getElementById("updateLbl");
 
 rewatchToggle(addToggle, addLbl);
 rewatchToggle(updateToggle, updateLbl);
 
-//* TOGGLE INCREMENT AND DECREMENT OF + or - SIGN
+//* ==================== EPISODE INCREMENT/DECREMENT ====================
+
+//* INCREMENT EPISODE BUTTON - increases episode count up to 50
 function addE(plusBtn, episodeInput) {
   plusBtn.addEventListener("click", () => {
     if (episodeInput.value < 50) episodeInput.value++;
   });
 }
 
+//* DECREMENT EPISODE BUTTON - decreases episode count down to 1
 function subtractE(minusBtn, episodeInput) {
   minusBtn.addEventListener("click", () => {
     if (episodeInput.value > 1) episodeInput.value--;
   });
 }
 
+//* INCREMENT RATING BUTTON - increases rating up to 10
 function addR(plusBtn, ratingInput) {
   plusBtn.addEventListener("click", () => {
     if (ratingInput.value < 10) ratingInput.value++;
   });
 }
 
+//* DECREMENT RATING BUTTON - decreases rating down to 1
 function subtractR(minusBtn, ratingInput) {
   minusBtn.addEventListener("click", () => {
     if (ratingInput.value > 1) ratingInput.value--;
   });
 }
 
-//* Add form
+//* Add form - setup episode and rating buttons
 addE(
   document.getElementById("epPlus"),
   document.querySelector('input[name="addEpisode"]'),
@@ -92,7 +155,7 @@ subtractR(
   document.querySelector('input[name="addRating"]'),
 );
 
-//* Update form
+//* Update form - setup episode and rating buttons
 addE(
   document.getElementById("updateEpPlus"),
   document.querySelector('input[name="updateEpisode"]'),
@@ -110,21 +173,53 @@ subtractR(
   document.querySelector('input[name="updateRating"]'),
 );
 
-//* Validation Checker per Fields
-//* Add field (container)
+//* ==================== VALIDATION ====================
+
+//* VALIDATE FIELD - checks if input has value on blur event
+function validateField(input, errorEl, message) {
+  if (!input || !errorEl) return;
+  input.addEventListener("blur", function () {
+    if (!input.value) {
+      showError(errorEl, message);
+    } else {
+      errorEl.style.display = "none";
+    }
+  });
+}
+
+//* SHOW ERROR - displays error message below input field
+function showError(errorEl, message) {
+  if (!errorEl) return;
+  errorEl.textContent = message;
+  errorEl.style.display = "block";
+}
+
+//* CHECK FIELDS VALID - validates all required fields before submission
+function isFieldsValid(inputTitle, inputVerdict, errorElT, errorElV) {
+  if (!inputTitle.value || !inputVerdict.value) {
+    if (!inputTitle.value) {
+      showError(errorElT, "Anime Title is required.");
+    }
+    if (!inputVerdict.value) {
+      showError(errorElV, "Anime Verdict is required.");
+    }
+    return false;
+  }
+  return true;
+}
+
+//* Add form validation fields
 const addAnimeTitleInp = document.getElementById("addAnimeTitle");
 const addErrorTitle = document.getElementById("addTitle-err");
-
 const addAnimeVerdictInp = document.getElementById("addAnimeVerdict");
 const addErrorVerdict = document.getElementById("addVerdict-err");
 
 validateField(addAnimeTitleInp, addErrorTitle, "Anime Title is required.");
 validateField(addAnimeVerdictInp, addErrorVerdict, "Verdict is required.");
 
-//* Update field (container)
+//* Update form validation fields
 const updateAnimeTitleInp = document.getElementById("updateAnimeTitle");
 const updateErrorTitle = document.getElementById("updateTitle-err");
-
 const updateAnimeVerdictInp = document.getElementById("updateAnimeVerdict");
 const updateErrorVerdict = document.getElementById("updateVerdict-err");
 
@@ -139,7 +234,7 @@ validateField(
   "Verdict is required.",
 );
 
-//* Submits the form if all fields are validated (has value)
+//* ADD SUBMIT BUTTON - validates form before submission (ADD Container)
 document.getElementById("sbmtAdd").addEventListener("click", (e) => {
   e.preventDefault();
 
@@ -156,40 +251,53 @@ document.getElementById("sbmtAdd").addEventListener("click", (e) => {
   }
 });
 
-//* Checks the button for submit (Add container)
-function isFieldsValid(inputTitle, inputVerdict, errorElT, errorElV) {
-  if (!inputTitle.value || !inputVerdict.value) {
-    if (!inputTitle.value) {
-      showError(errorElT, "Anime Title is required.");
-    }
+//* UPDATE SUBMIT BUTTON - validates form before submission (UPDATE CONTAINER)
+function submitUpdate(dataListId) {
+  document.getElementById("sbmtUpdate").addEventListener("click", (e) => {
+    e.preventDefault();
 
-    if (!inputVerdict.value) {
-      showError(errorElV, "Anime Verdict is required.");
-    }
-    return false;
-  }
+    let canSubmit = isFieldsValid(
+      updateAnimeTitleInp,
+      updateAnimeVerdictInp,
+      updateErrorTitle,
+      updateErrorVerdict,
+    );
 
-  return true;
-}
-
-function showError(errorEl, message) {
-  if (!errorEl) return;
-  errorEl.textContent = message;
-  errorEl.style.display = "block";
-}
-
-function validateField(input, errorEl, message) {
-  if (!input || !errorEl) return;
-  input.addEventListener("blur", function () {
-    if (!input.value) {
-      showError(errorEl, message);
-    } else {
-      errorEl.style.display = "none";
+    if (canSubmit) {
+      document.getElementById("hiddenSbmtUpdate").disabled = false;
+      document.getElementById("updateListId").value = dataListId;
+      document.querySelector("form").submit();
     }
   });
 }
 
-//* Helps with the checkboxes for every anime cards
+//* REMOVE SUBMIT BUTTON - instantly removes the data equal to the passed value (REMOVE CONTAINER)
+function submitRemove(dataListId) {
+  document.getElementById("sbmtDelete").addEventListener("click", (e) => {
+    e.preventDefault();
+
+    document.getElementById("hiddenSbmtRemove").disabled = false;
+    document.getElementById("removeListId").value = dataListId;
+    document.querySelector("form").submit();
+  });
+}
+
+//* SEARCH BUTTON - filters anime cards in real time based on title input (SEARCH CONTAINER)
+//? Adds the event listener to the searchValue (input tag) -> uses "input" to detect an event (Listens for every keystroke in the search input)
+document.getElementById("searchValue").addEventListener("input", (e) => {
+  const term = e.target.value.toLowerCase(); //? Makes the input's value lowercased
+
+  //? Gets the query (anime cards) and iterates each to get the h3 (title)
+  document.querySelectorAll(".animeCard").forEach((card) => {
+    const title = card.querySelector("h3").textContent.toLowerCase();
+    card.style.display = title.includes(term) ? "" : "none";
+    //? Compares the title of the card to the input value (lowercased), If found will do nothing (already showing to begin with), if not (will be hidden)
+  });
+});
+
+//* ==================== ANIME CARD INTERACTIONS ====================
+
+//* ANIME CARD CHECKBOX - toggles checkbox when card is clicked
 document.querySelectorAll(".animeCard").forEach((card) => {
   card.addEventListener("click", () => {
     const cb = card.querySelector(".animeSelect");
@@ -197,18 +305,20 @@ document.querySelectorAll(".animeCard").forEach((card) => {
   });
 });
 
-//* Assists the design for anime cards -> detects the clicks to expand the card for long TITLES
+//* CARD TITLE EXPAND - expands title text when clicked
 document.querySelectorAll(".cardHeader h3").forEach((title) => {
   title.addEventListener("click", (e) => {
-    e.stopPropagation(); // prevent card checkbox from toggling
+    e.stopPropagation();
     title.classList.toggle("expanded");
   });
 });
 
+//* VERDICT READ MORE - shows read more button if verdict text is clamped
 document.querySelectorAll(".verdict").forEach((p) => {
   if (p.scrollHeight > p.clientHeight) {
-    p.nextElementSibling.style.display = "block"; // show "read more" only if clamped
+    p.nextElementSibling.style.display = "block";
   }
+  //* VERDICT EXPAND - toggles verdict expansion and button text
   p.nextElementSibling.addEventListener("click", (e) => {
     e.stopPropagation();
     p.classList.toggle("expanded");

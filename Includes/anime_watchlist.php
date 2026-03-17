@@ -5,6 +5,7 @@
             $this->pdo = $db->getConnection();
             
         }      
+//*     Method for adding a new record/anime in the log
         public function addRecord($userId, $title, $status, $episode, $rating,$verdict,$rewatch){
             try{
                 $stmt = $this->pdo->prepare("INSERT INTO anime_watchlist(whoareyou_user_id, title, status, episodes, rating, verdict, rewatch) VALUES(?, ?, ?, ?, ?, ?, ?) ");
@@ -16,12 +17,33 @@
             }
         }    
 
+//*     Method for updating an existing record
+        public function updateRecord($userId, $animeListId, $title, $status, $episode, $rating,$verdict,$rewatch){
+            try{
+                $stmt = $this->pdo->prepare("UPDATE anime_watchlist SET title = ?, status = ?, episodes = ?, rating = ?, verdict = ?, rewatch = ? WHERE whoareyou_user_id = ? AND id = ?");
+                $stmt->execute([$title, $status, $episode, $rating, $verdict, $rewatch, $userId, $animeListId]);
+
+                return true;
+            }catch(PDOException $e){
+                die("Something went wrong. Please try again later. (" . $e->getMessage() . ")");
+            }
+        }
+        public function deleteRecord($userId, $animeListId){
+            try{
+                $stmt = $this->pdo->prepare("DELETE FROM anime_watchlist WHERE whoareyou_user_id = ? AND id = ?");
+                $stmt ->execute([$userId, $animeListId]);
+                
+                return true;
+            }catch(PDOException $e){
+                die("Something went wrong. Please try again later. (" . $e->getMessage() . ")");
+            }
+        }
 
         public function getAll($userId){
             $newRecords = [];
 
             try{
-                $stmt = $this->pdo->prepare("SELECT title, status, episodes, rating, verdict, rewatch FROM anime_watchlist WHERE whoareyou_user_id = ?");
+                $stmt = $this->pdo->prepare("SELECT id, title, status, episodes, rating, verdict, rewatch FROM anime_watchlist WHERE whoareyou_user_id = ?");
                 $stmt->execute([$userId]);
 
                 //* Output gets fetch as an associate array
@@ -31,6 +53,7 @@
                 $index = 1;
                 foreach($records as $row){                    
                     $newRecords[] = [
+                        "dbAnimeId" => $row["id"],
                         "listNum"=> $index++,
                         "title"  => $row["title"],
                         "status" => $row["status"], 
