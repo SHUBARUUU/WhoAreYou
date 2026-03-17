@@ -107,7 +107,7 @@ const updateLbl = document.getElementById("updateLbl");
 rewatchToggle(addToggle, addLbl);
 rewatchToggle(updateToggle, updateLbl);
 
-//* ==================== EPISODE INCREMENT/DECREMENT ====================
+//* ==================== EPISODE AND RAING INCREMENT/DECREMENT ====================
 
 //* INCREMENT EPISODE BUTTON - increases episode count up to 50
 function addE(plusBtn, episodeInput) {
@@ -173,6 +173,25 @@ subtractR(
   document.querySelector('input[name="updateRating"]'),
 );
 
+//* ==================== EPISODE AND RATING INPUT FIELD VALIDATION ====================
+
+//* Checks the counter fields (episode and rating) if they are within the bounds
+function isWithinBounds(errElEp, errElRate, epField, rateField) {
+  const condition1 = epField.value <= 500 && epField.value >= 1 ? true : false;
+  const condition2 =
+    rateField.value <= 10 && rateField.value >= 1 ? true : false;
+
+  if (condition1 && condition2) return true;
+
+  if (!condition1) showError(errElEp, "Episode is out of bounds. (1-500)");
+  else errElEp.style.display = "none";
+
+  if (!condition2) showError(errElRate, "Rate is out of bounds. (1-10)");
+  else errElRate.style.display = "none";
+
+  return false;
+}
+
 //* ==================== VALIDATION ====================
 
 //* VALIDATE FIELD - checks if input has value on blur event
@@ -214,6 +233,10 @@ const addErrorTitle = document.getElementById("addTitle-err");
 const addAnimeVerdictInp = document.getElementById("addAnimeVerdict");
 const addErrorVerdict = document.getElementById("addVerdict-err");
 
+//* Added fields to check if out of bounds
+const addEpisodeField = document.getElementById("addEpisode");
+const addRatingField = document.getElementById("addRating");
+
 validateField(addAnimeTitleInp, addErrorTitle, "Anime Title is required.");
 validateField(addAnimeVerdictInp, addErrorVerdict, "Verdict is required.");
 
@@ -244,8 +267,19 @@ document.getElementById("sbmtAdd").addEventListener("click", (e) => {
     addErrorTitle,
     addErrorVerdict,
   );
+  //* Gets the span tags that produces the error message
+  const errElEp = document.getElementById("addEp-err");
+  const errElRate = document.getElementById("addRate-err");
 
-  if (canSubmit) {
+  //* Checks if they are within the bounds
+  let canSubmit2 = isWithinBounds(
+    errElEp,
+    errElRate,
+    addEpisodeField,
+    addRatingField,
+  );
+
+  if (canSubmit && canSubmit2) {
     document.getElementById("hiddenSbmtAdd").disabled = false;
     document.querySelector("form").submit();
   }
@@ -263,7 +297,19 @@ function submitUpdate(dataListId) {
       updateErrorVerdict,
     );
 
-    if (canSubmit) {
+    //* Gets the span tags that produces the error message
+    const errElEp = document.getElementById("addEp-err");
+    const errElRate = document.getElementById("addRate-err");
+
+    //* Checks if they are within the bounds
+    let canSubmit2 = isWithinBounds(
+      errElEp,
+      errElRate,
+      addEpisodeField,
+      addRatingField,
+    );
+
+    if (canSubmit && canSubmit2) {
       document.getElementById("hiddenSbmtUpdate").disabled = false;
       document.getElementById("updateListId").value = dataListId;
       document.querySelector("form").submit();

@@ -66,8 +66,10 @@ if (register) {
       e.preventDefault();
     }
 
-    if (!mailVal.match(".*@.*") && mailVal) {
-      showError(errorEmailR, "@ is missing.");
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!emailRegex.test(mailVal) && mailVal) {
+      showError(errorEmailR, "Invalid email.");
       e.preventDefault();
     }
 

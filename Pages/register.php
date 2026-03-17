@@ -13,24 +13,34 @@
 
     $error = "";
 
-    if (!empty($_POST["username"]) && !empty($_POST["email"]) && !empty($_POST["pass"])) {
+    //* Clever hack do while(false) -> can do guard clause since we do before we loop, but loop is a fake 
+    do {
+        if(empty($_POST["username"]) || empty($_POST["email"]) || empty($_POST["pass"])) break;
+
         $username = htmlspecialchars($_POST["username"], ENT_QUOTES);
-
-        if(preg_match('/^[a-zA-Z0-9_]+$/', $username)){ 
-            $email = htmlspecialchars($_POST["email"], ENT_QUOTES);
-            $password = htmlspecialchars(trim($_POST["pass"]), ENT_QUOTES);
-            $checked = $_POST["chckBx"] ?? null;
-
-            if(isset($checked)){
-                if($auth->register($username, $email, $password)){
-                    redirect("../index.php");
-                    exit();  
-                }
-
-                $error = "Email already in use.";
-            }       
+        if(!preg_match('/^[a-zA-Z0-9_]+$/', $username)){
+            $error = "Invalid username.";
+            break;
         }
-    }
+
+        $email = htmlspecialchars($_POST["email"], ENT_QUOTES);
+        if(!filter_var($email, FILTER_VALIDATE_EMAIL)){
+            $error = "Invalid email.";
+            break;
+        }
+
+        $password = htmlspecialchars(trim($_POST["pass"]), ENT_QUOTES);
+        $checked = $_POST["chckBx"] ?? null;
+
+        if(!isset($checked)) break;
+
+        if($auth->register($username, $email, $password)){
+            redirect("../index.php");
+            exit();
+        }
+
+        $error = "Email already in use.";
+    } while(false);
 ?>
 
 <!DOCTYPE html>
@@ -51,7 +61,7 @@
     <div id="registerBG">
         <div class="container" id="registerC">
             <div class="rightDsn"></div>
-            <form action="" method="post">
+            <form action="" method="post" novalidate>
                 <h1>CREATE ACCOUNT</h1>
 
                 <?php if($error): ?>

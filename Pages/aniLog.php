@@ -72,17 +72,20 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["sbmtUpdate"]) && $hasRe
 
                         <div class="counters">
                             <h4>Episodes:</h4>
-                            <input type="number" name="addEpisode" value="1" min="1" max="50" placeholder="1">
-                            <button type="button" id="epPlus">+</button>
                             <button type="button" id="epMinus">-</button>
+                            <input type="number" id="addEpisode" name="addEpisode" value="1" min="1" max="50" placeholder="1">
+                            <button type="button" id="epPlus">+</button>
                         </div>
+                        <span id="addEp-err" class="err"></span>
 
                        <div class="counters">
                             <h4>Rating:</h4>
-                            <input type="number" name="addRating" value="1" min="1" max="10" placeholder="1">
+                             <button type="button" id="rateMinus">-</button>
+                            <input type="number" id="addRating" name="addRating" value="1" min="1" max="10" placeholder="1">
                             <button type="button" id="ratePlus">+</button>
-                            <button type="button" id="rateMinus">-</button>
                         </div>
+                        <span id="addRate-err" class="err"></span>
+
                         <textarea name="addVerdict" id="addAnimeVerdict" placeholder="Verdict"></textarea>
                         <span id="addVerdict-err" class="err"></span>
 
@@ -115,16 +118,16 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["sbmtUpdate"]) && $hasRe
 
                         <div class="counters">
                             <h4>Episodes:</h4>
+                             <button type="button" id="updateEpMinus">-</button>
                             <input type="number" name="updateEpisode" value="1" min="1" max="50" placeholder="1">
-                            <button type="button" id="updateEpPlus">+</button>
-                            <button type="button" id="updateEpMinus">-</button>
+                            <button type="button" id="updateEpPlus">+</button>  
                         </div>
 
                        <div class="counters">
                             <h4>Rating:</h4>
-                            <input type="number" name="updateRating" value="1" min="1" max="10" placeholder="1">
-                            <button type="button" id="updateRatePlus">+</button>
                             <button type="button" id="updateRateMinus">-</button>
+                            <input type="number" name="updateRating" value="1" min="1" max="10" placeholder="1">
+                            <button type="button" id="updateRatePlus">+</button> 
                         </div>
                         
                         <textarea name="updateVerdict" id="updateAnimeVerdict" placeholder="Verdict"></textarea>

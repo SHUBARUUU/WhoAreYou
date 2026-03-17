@@ -226,12 +226,16 @@ textarea::placeholder {
 /*? Design for addCounters div (Range for ) Episode and Rating */
 .invisiContainers .counters {
   display: grid;
-  grid-template-columns: 2fr auto 1fr 1fr;
+  grid-template-columns: 2fr 1fr auto 1fr;
   grid-template-rows: auto;
   gap: 0.5em;
   align-items: center;
   /** NEEDS CONTENT ALIGNMENT VERTICAL  */
   width: 100%;
+}
+
+.invisiContainers .counters input[type="number"] {
+  text-align: center;
 }
 
 /** Design for Rewatch */
