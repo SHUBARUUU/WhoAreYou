@@ -57,8 +57,6 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["sbmtUpdate"]) && $hasRe
                 <input type="button" name="" value="Update" id="updateBtn">
                 <input type="button" name="" value="Delete" id="deleteBtn">
                 <input type="button" name="" value="Search" id="searchBtn">
-                <!-- WIP Search bar addition tentative...  -->
-                <!-- ADD CONTAINER (WIP) -->
                 <div class="invisiContainers" id="addOuterContainer">
                     <div id="addInnerContainer">
                         <h2>ADD A RECORD</h2>
